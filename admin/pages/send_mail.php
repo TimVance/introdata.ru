@@ -1,7 +1,7 @@
 <?php
-$to  = $_GET['email'];
+$to  = $_GET['email'].', mail@introdata.ru';
 $idd = $_GET['id'];
-$from = '=?UTF-8?B?'. base64_encode("Учебный центр 'Невромед-Клиника'") .'?=';
+$from = '=?UTF-8?B?'. base64_encode("Учебный центр Невромед-Клиника") .'?=';
 
 $subject = "Активация видео";
 
@@ -9,7 +9,6 @@ $message = file_get_contents('http://'.$_SERVER['HTTP_HOST']."/mail_html.php?id=
 
 $headers  = "Content-type: text/html; charset=utf-8 \r\n";
 $headers .= "From: $from <mail@introdata.ru>\r\n";
-$headers .= "Reply-To: <mail@introdata.ru>\r\n";
 $headers .= "Return-path: <mail@introdata.ru>\r\n";
 $headers .= 'MIME-Version: 1.0';
 $headers .= 'X-Mailer: PHP/' . phpversion();
