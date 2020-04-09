@@ -12,7 +12,8 @@ if (isset($_POST["add_links"])) {
         $id = $_POST["id"];
         $title = $_POST["title"];
         $links = $_POST["links"];
-        $lecturer = $_POST["lecturer"];
+        $lecturer = $_GET["lecturer"];
+        $id_video = $_POST["id_video"];
 
         if (isset($_FILES['video_file'])) {
 
@@ -70,7 +71,7 @@ if (isset($_POST["add_links"])) {
         }else{
             $active_session = 1;
         }
-        $test = mysqli_query($GLOBALS['link'],"INSERT INTO dl_links ( `id` , `link`, `title`, `category`, `lecturer`, `latest`, `hash`, `duration`, `created`, `life_id`, `life_id_time`, `life_link`, `life_link_time`, `life_video`, `life_video_time`, `link_last`, `all_device`, `active_session`) VALUES ( '$id', '$links', '$title', '$category', '$lecturer', '$now', '$hash', '$duration', '$now', '$life_id', '$life_id_time', '$life_link', '$life_link_time', '$life_video', '$life_video_time', '$link_last', '$all_device', '$active_session')");
+        $test = mysqli_query($GLOBALS['link'],"INSERT INTO dl_links ( `id` , `link`, `title`, `category`, `lecturer`, `latest`, `hash`, `duration`, `created`, `life_id`, `life_id_time`, `life_link`, `life_link_time`, `life_video`, `life_video_time`, `link_last`, `all_device`, `active_session`, `id_video`) VALUES ( '$id', '$links', '$title', '$category', '$lecturer', '$now', '$hash', '$duration', '$now', '$life_id', '$life_id_time', '$life_link', '$life_link_time', '$life_video', '$life_video_time', '$link_last', '$all_device', '$active_session', '$id_video')");
         if ($test) {
             echo "<p><strong>:: link was added ::</strong></p>\n";
         }else {
@@ -91,48 +92,38 @@ if (isset($_POST["add_links"])) {
     echo "<form method=\"post\" enctype=\"multipart/form-data\">\n";
     echo "<input type=\"hidden\" name=\"action\" value=\"add\">\n";
     echo "<table align=\"center\" border=\"0\" cellpadding=\"2\">\n";
-    echo "<tr><td><p><strong>Title of link:</strong></p></td>\n";
-    echo "<td><input type=\"text\" name=\"title\" size=\"25\"></td></tr>\n";
-    echo "<tr><td><p><strong>Link to file:</strong></p></td>\n";
-    echo "<td><input type=\"text\" id=\"links\" name=\"links\" size=\"25\"></td></tr>\n";
-    echo "<tr><td><p><strong>Choose from uploads:</strong></p></td>\n";
-    echo "<td>";
 
-    $video_files = array();
-    $video_files = scandir('./../video');
-
-    echo '<select class="inputlink">';
-    foreach ($video_files as $video) {
-        if ($video == '.' || $video == '..') continue;
-
-        echo '<option value="' . $video . '">' . $video . '</option>';
-    }
-
-    echo '</select>';
-
-    echo "</td></tr>\n";
 
     echo "<tr><td><p><strong>Select Lecturer:</strong></p></td>\n";
     echo "<td>";
-
-
     $myResult = mysqli_query($GLOBALS['link'], "SELECT id, name FROM dl_lecturers");
-
-    echo '<select name="lecturer">';
-
+    echo '<select onchange="document.location=this.options[this.selectedIndex].value" name="lecturer">';
     if ($myResult) {
+        echo '<option value="index.php?action=add">Select</option>';
         while($row = mysqli_fetch_array($myResult)) {
-            echo '<option value="' . $row["id"] . '">' . $row["name"] . '</option>';
+            echo '<option '.($_GET["lecturer"] == $row["id"] ? 'selected ' : '').'value="index.php?action=add&lecturer=' . $row["id"] . '">' . $row["name"] . '</option>';
         }
     }
-
     echo '</select>';
     echo "</td></tr>\n";
 
-    echo "<tr><td><p><strong>Or... Upload the video:</strong></p></td>\n";
-    echo "<td><input type=\"file\" name=\"video_file\" size=\"25\"></td></tr>\n";
-    //echo "<tr><td><p><strong>Lifetime(min):</strong></p></td>\n";
-    //echo "<td><input type=\"text\" name=\"duration\" size=\"10\" value=\"1\"></td></tr>\n";
+    if (!empty($_GET["lecturer"])) {
+        echo "<tr><td><p><strong>Select Video:</strong></p></td>\n";
+        echo "<td>";
+        $myResult = mysqli_query($GLOBALS['link'], "SELECT id, name FROM dl_video WHERE lecturer = ".$_GET["lecturer"]);
+        echo '<select name="id_video">';
+        if ($myResult) {
+            while ($row = mysqli_fetch_array($myResult)) {
+                echo '<option ' . ($_GET["lecturer"] == $row["id"] ? 'selected ' : '') . 'value="' . $row["id"] . '">' . $row["name"] . '</option>';
+            }
+        }
+        echo '</select>';
+        echo "</td></tr>\n";
+    }
+
+
+    echo "<tr><td><p><strong>Title of link:</strong></p></td>\n";
+    echo "<td><input type=\"text\" name=\"title\" size=\"25\"></td></tr>\n";
     echo "<tr><td><p><strong>Doctors</strong></p><p class='email_select' style='color: green;'></p></td>\n";
     //echo "<td><input type=\"text\" name=\"category\" size=\"25\"></td></tr>\n";
     echo "<td><select name=\"category\" class='select_doct' style='width: 100%;'>";
