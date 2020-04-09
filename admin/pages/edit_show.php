@@ -51,7 +51,8 @@ if($_GET["id"]) {
         echo '<select name="id_video">';
         echo '<option>-</option>';
         while($row = mysqli_fetch_array($myResult)) {
-            echo '<option data-lecturer="'.$row["lecturer"].'" '.($row["id"] == $myLink ? 'selected ' : '').'value="'.$row["id"].'">'.$row["name"].'</option>';
+
+            echo '<option '.($row["lecturer"] == $MyLecturer ? "" : "style='display:none'").' data-lecturer="'.$row["lecturer"].'" '.($row["id"] == $myLink ? 'selected ' : '').'value="'.$row["id"].'">'.$row["name"].'</option>';
         }
         echo '</select>';
 
