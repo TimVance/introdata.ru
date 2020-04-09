@@ -12,6 +12,7 @@
                     <a href="?action=doctors">Doctors</a> ::
                     <a href="?action=show">Show all link</a> ::
                     <a href="?action=add_lecturer">Add lecturer</a> ::
+                    <a href="?action=add_descriptions">Add Descriptions</a> ::
                     <a href="?action=statistics">Statistics</a> ::
                     <a href="?action=mails">Rating</a> ::
                     <a href="?action=lect_mails">Questions</a> ::
