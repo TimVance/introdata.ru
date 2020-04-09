@@ -1,0 +1,81 @@
+.mask{
+    background: rgba(225, 225, 225, 0.65);
+    position: fixed;
+    width: 100vw;
+    min-height: 100vh;
+    display: none;
+    overflow: auto;
+    top:0;
+}
+.close_modal {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 25px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.close_modal:hover {
+    color: red;
+}
+.nap_mess{
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    width: 300px;
+    padding: 20px;
+    background: #e1e1e1;
+}
+.nap_mess.error_mes{
+    color: red;
+    border: 1px solid red;
+}
+.nap_mess.ok_mes{
+    color: green;
+    border: 1px solid green;
+}
+button.send_reg {
+    margin: 20px;
+    height: 30px;
+    width: 30%;
+}
+.modal_reg {
+    position: absolute;
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    left: 25%;
+    top: 10%;
+    background: #fff;
+    border: 1px solid;
+    padding-top: 20px;
+}
+.modal_reg input {
+    width: 60%!important;
+    font-size: 15px;
+    outline: none;
+}
+.modal_reg h3 {
+    width: 30%;
+    padding: 10px 0;
+}
+
+@media (max-width: 767px) {
+    .modal_reg input {
+        width: calc(50% - 10px)!important;
+        font-size: 13px;
+        padding: 5px;
+    }
+    .modal_reg h3 {
+        width: calc(50% - 10px)!important;
+        font-size:13px;
+        padding: 5px;
+    }
+    .modal_reg {
+        width: 90%;
+        left: 5%;
+    }
+}
