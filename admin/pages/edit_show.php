@@ -7,7 +7,7 @@ if($_GET["id"]) {
         $myArray = mysqli_fetch_array($myResult);
         $myID = $myArray["id"];
         $myTitle = $myArray["title"];
-        $myLink = $myArray["link"];
+        $myLink = $myArray["id_video"];
         $myCategory = $myArray["category"];
         $MyLecturer = $myArray["lecturer"];
         $myLatest = $myArray["latest"];
@@ -21,8 +21,6 @@ if($_GET["id"]) {
         echo " <td><p><strong>$myID</strong></p></td>\n";
         echo "</tr>\n<tr>\n <td><p>Title: </p></td>\n";
         echo " <td><input type=\"text\" name=\"title\" size=\"25\" value=\"$myTitle\"></td>\n";
-        echo "</tr>\n<tr>\n <td><p>Link to file: </p></td>\n";
-        echo " <td><input type=\"text\" name=\"links\" size=\"25\" value=\"$myLink\"></td>\n";
 
         echo "<tr><td><p>Select Lecturer:</p></td>\n";
         echo "<td>";
@@ -30,7 +28,7 @@ if($_GET["id"]) {
         $myQuery = "SELECT id, name FROM dl_lecturers";
         $myResult = mysqli_query($GLOBALS['link'], $myQuery);
 
-        echo '<select name="lecturer">';
+        echo '<select name="lecturer" id="select-lecture">';
 
         if ($myResult = mysqli_query($GLOBALS['link'], $myQuery)) {
             while($row = mysqli_fetch_array($myResult)) {
@@ -45,6 +43,17 @@ if($_GET["id"]) {
 
         echo '</select>';
         echo "</td></tr>\n";
+
+        echo "<tr><td><p>Select Video:</p></td>\n";
+        echo "<td>";
+        $myQuery = "SELECT id, name, lecturer FROM dl_video";
+        $myResult = mysqli_query($GLOBALS['link'], $myQuery);
+        echo '<select name="id_video">';
+        echo '<option>-</option>';
+        while($row = mysqli_fetch_array($myResult)) {
+            echo '<option data-lecturer="'.$row["lecturer"].'" '.($row["id"] == $myLink ? 'selected ' : '').'value="'.$row["id"].'">'.$row["name"].'</option>';
+        }
+        echo '</select>';
 
         echo "<tr><td><p><strong>Lifetime(min):</strong></p></td>\n";
         echo "<td><input type=\"text\" name=\"duration\" size=\"10\" value=\"$myDuration\"></td></tr>\n";
@@ -71,18 +80,15 @@ if(isset($_POST["edit_link"])) {
     if(strlen($_POST["title"]) < 5) {
         showError("Title entered is to short!");
     }
-    if(strlen($_POST["links"]) < 5) {
-        showError("The link seems to be to short!");
-    }
     else {
         $id = $_POST["id"];
         $title = $_POST["title"];
-        $links = $_POST["links"];
+        $links = $_POST["id_video"];
         $category = $_POST["category"];
         $lecturer = $_POST["lecturer"];
         $duration = $_POST["duration"];
 
-        $myQuery = "UPDATE dl_links SET title = '$title', link = '$links', category = '$category', lecturer = '$lecturer', duration = '$duration' WHERE id = '$id'";
+        $myQuery = "UPDATE dl_links SET title = '$title', id_video = '$links', category = '$category', lecturer = '$lecturer', duration = '$duration' WHERE id = '$id'";
         if (mysqli_query($GLOBALS['link'], $myQuery)) {
             echo "<p>:: Download-id: <strong>$id</strong> has been updated! ::</p>";
             echo "<script>setTimeout('location.replace(\"/admin/index.php?action=".$_GET['action']."&id=".$_GET['id']."\")',2000);</script>";
@@ -94,3 +100,16 @@ if(isset($_POST["edit_link"])) {
         }
     }
 }
+?>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>
+    $(function () {
+        $("#select-lecture").change(function() {
+            let lecturer = $("#select-lecture option:selected").val();
+            $("select[name='id_video'] option").hide().removeAttr("selected");
+            $("select[name='id_video'] option[data-lecturer='" + lecturer + "']").show().change();
+            console.log(lecturer);
+        });
+    });
+</script>

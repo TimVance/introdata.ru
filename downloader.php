@@ -72,7 +72,7 @@ if (isset($_GET["id"])) {
 	if ($myConn) {
 		$now = date("Y-m-d H:i:s");
 		mysqli_select_db($myConn,$myDB);
-		$myQuery = "SELECT title, link, latest, hash, started, session, duration, `created`, `life_id`, `life_id_time`, `life_link`, `life_link_time`, `life_video`, `life_video_time`, `link_last`, `all_device`, `created2`, online, active_session FROM dl_links WHERE hash = '$id'";
+		$myQuery = "SELECT title, link, latest, hash, started, session, duration, `created`, `life_id`, `life_id_time`, `life_link`, `life_link_time`, `life_video`, `life_video_time`, `link_last`, `all_device`, `created2`, online, active_session, id_video FROM dl_links WHERE hash = '$id'";
 		$myResult = mysqli_query($myConn, $myQuery);
 
 		if (!($myArray = mysqli_fetch_array($myResult))) {
@@ -91,7 +91,13 @@ if (isset($_GET["id"])) {
 
 				$skipLink = $PHP_SELF . "?id=" . $id . "&skip=1";
 				$title = $myArray["title"];
-				$link = $myArray["link"];
+
+			$myQueryAr = "SELECT * FROM dl_video WHERE id = '".$myArray["id_video"]."'";
+			$ArUrl = mysqli_query($myConn, $myQueryAr);
+			$myArrayUrl = mysqli_fetch_array($ArUrl);
+
+				$link = $myArrayUrl["url"];
+
 				// var_dump($_SESSION['session_time']);
 				// die();
 				if (empty($myArray['started'])) {
