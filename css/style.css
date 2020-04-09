@@ -335,6 +335,11 @@ input[type='submit'] {
 	height: 100px;
 }
 
+.video_description {
+    text-align: center;
+    margin: 20px 0;
+}
+
 @media (max-width: 1200px) {
     .sublogo{
         display: none;

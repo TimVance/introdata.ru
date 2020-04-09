@@ -24,6 +24,13 @@
 				$description = $myArray["description"];
 			}
 		}
+
+		$link_name = array_pop(explode("/", $link));
+        $get_descriptions = "SELECT * FROM dl_descriptions WHERE name = '$link_name'";
+        if($myResult = mysqli_query($myConn, $get_descriptions)) {
+            $myArray = mysqli_fetch_array($myResult);
+            $description_video = $myArray["description"];
+        }
 	}	
 	
 ?>
