@@ -3,8 +3,6 @@ if($_GET['tern'] == '') {
     if (isset($_POST["submit"])) {
         if (strlen($_POST["url"]) == 0) {
             showError("You did not enter a link!");
-        } elseif (strlen($_POST["description"]) == 0) {
-            showError("You did not enter a description!");
         } else {
             $id = '';
             $lecturer = '';
@@ -181,32 +179,27 @@ elseif ($_GET['tern'] == 'edit'){
     }
 
     if(isset($_POST['update_description'])) {
-        if (strlen($_POST["description"]) == 0) {
-            showError("You did not enter a description!");
+        $id = 0;
+        $name = '';
+        $description = '';
+        $lecturer = '';
+        $url = '';
+
+        $id = $_POST["id"];
+        $description = $_POST["description"];
+        $lecturer = $_POST["lecturer"];
+        $name = $_POST["name"];
+        $url = $_POST["url"];
+
+        if (mysqli_query($GLOBALS['link'],
+            "UPDATE dl_video SET url = '$url', description = '$description', lecturer = '$lecturer', name = '$name' WHERE id = '$id'")) {
+            echo "<p>:: Description-id: <strong>$id</strong> has been updated! ::</p>";
+            echo "<script>setTimeout('location.replace(\"/admin/index.php?action=add_video\")',2000);</script>";
         }
         else {
-            $id = 0;
-            $name = '';
-            $description = '';
-            $lecturer = '';
-            $url = '';
-
-            $id = $_POST["id"];
-            $description = $_POST["description"];
-            $lecturer = $_POST["lecturer"];
-            $name = $_POST["name"];
-            $url = $_POST["url"];
-
-            if (mysqli_query($GLOBALS['link'],
-                "UPDATE dl_video SET url = '$url', description = '$description', lecturer = '$lecturer', name = '$name' WHERE id = '$id'")) {
-                echo "<p>:: Description-id: <strong>$id</strong> has been updated! ::</p>";
-                echo "<script>setTimeout('location.replace(\"/admin/index.php?action=add_video\")',2000);</script>";
-            }
-            else {
-                $errNo = mysqli_errno($myConn);
-                $error = mysqli_error($myConn);
-                showError("$errNo: $error");
-            }
+            $errNo = mysqli_errno($myConn);
+            $error = mysqli_error($myConn);
+            showError("$errNo: $error");
         }
     }
 }
