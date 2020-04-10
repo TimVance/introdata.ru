@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // $to  = "zotovi1962@mail.ru"; 
-$to = "zotovi1962@mail.ru"; 
+$to = "zotovi1962@mail.ru, ".$_POST['email'];
 
 if ($_SERVER['REMOTE_ADDR'] == '88.84.214.201') {
 	error_reporting(E_ALL);
