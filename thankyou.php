@@ -8,10 +8,11 @@
 		
 		$hash = mysqli_real_escape_string($myConn, $_GET['id']);
 
-        $get_hash = "SELECT lecturer, link FROM dl_links WHERE hash = '$hash'";
+        $get_hash = "SELECT lecturer, id_video FROM dl_links WHERE hash = '$hash'";
 		if($myResult = mysqli_query($myConn, $get_hash)) {
 			$myArray = mysqli_fetch_array($myResult);
 			$lecturer = $myArray["lecturer"];
+			$id_video = $myArray["id_video"];
 		}
 		
 		if (is_numeric($lecturer) and $lecturer > 0) {
@@ -23,7 +24,7 @@
 				$description = $myArray["description"];
 			}
 
-            $get_video = "SELECT * FROM dl_video WHERE lecturer = $lecturer";
+            $get_video = "SELECT * FROM dl_video WHERE id = $id_video";
             if($myResult = mysqli_query($myConn, $get_video)) {
                 $myArray           = mysqli_fetch_array($myResult);
                 $link              = $myArray["url"];
